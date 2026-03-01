@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local SEO Audit Tool</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <div class="badge">🔍 Free Local SEO Audit</div>
+      <h1>Audit Your Local SEO<br /><span class="gradient-text">in Seconds</span></h1>
+      <p class="hero-sub">Get a comprehensive audit of your website's local SEO health — schema markup, NAP consistency, Google signals, mobile friendliness, page speed, and more.</p>
+
+      <div class="search-card">
+        <div class="search-row">
+          <div class="input-wrap">
+            <span class="input-icon">🌐</span>
+            <input id="urlInput" type="url" placeholder="https://yourbusiness.com" autocomplete="off" />
+          </div>
+          <button id="auditBtn" onclick="runAudit()">
+            <span class="btn-text">Run Audit</span>
+            <span class="btn-spinner hidden">⟳</span>
+          </button>
+        </div>
+        <div id="errorMsg" class="error-msg hidden"></div>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat"><strong>10</strong><span>Audit Categories</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><strong>50+</strong><span>SEO Checks</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><strong>Free</strong><span>No Account Needed</span></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- LOADING -->
+  <div id="loadingSection" class="hidden">
+    <div class="container loading-wrap">
+      <div class="loading-card">
+        <div class="spinner"></div>
+        <h3>Auditing your site…</h3>
+        <p id="loadingMsg">Fetching page content…</p>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <main id="resultsSection" class="hidden">
+    <div class="container">
+
+      <!-- Score overview -->
+      <div class="score-overview">
+        <div class="score-left">
+          <div class="score-circle" id="scoreCircle">
+            <svg viewBox="0 0 120 120">
+              <circle class="score-bg" cx="60" cy="60" r="52" />
+              <circle class="score-arc" id="scoreArc" cx="60" cy="60" r="52" />
+            </svg>
+            <div class="score-inner">
+              <span class="score-number" id="scoreNumber">0</span>
+              <span class="score-grade" id="scoreGrade">?</span>
+            </div>
+          </div>
+          <div class="score-meta">
+            <h2 id="auditedUrl">Audit Results</h2>
+            <p id="auditedAt" class="muted"></p>
+          </div>
+        </div>
+        <div class="score-pills">
+          <div class="pill pass"><span id="passCount">0</span> Passed</div>
+          <div class="pill warn"><span id="warnCount">0</span> Warnings</div>
+          <div class="pill fail"><span id="failCount">0</span> Failed</div>
+        </div>
+      </div>
+
+      <!-- Category bars -->
+      <div class="categories-grid" id="categoriesGrid"></div>
+
+      <!-- Sections detail -->
+      <div id="sectionsWrap"></div>
+
+      <!-- Re-audit -->
+      <div class="reaudit-wrap">
+        <button class="btn-secondary" onclick="resetForm()">← Audit Another Site</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- FEATURES -->
+  <section class="features-section" id="featuresSection">
+    <div class="container">
+      <h2 class="section-title">What We Check</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>SSL & HTTPS</h3>
+          <p>Verify HTTPS is active, HTTP redirects correctly, and your SSL certificate isn't expiring soon.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏷️</div>
+          <h3>Meta Tags</h3>
+          <p>Check title length, meta description, viewport, canonical tag, and Open Graph tags.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>Schema Markup</h3>
+          <p>Detect LocalBusiness JSON-LD schema including name, address, phone, geo, and hours.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📍</div>
+          <h3>NAP Consistency</h3>
+          <p>Find Name, Address, and Phone number on the page and check for consistency signals.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🗺️</div>
+          <h3>Google Signals</h3>
+          <p>Check for Google Maps embeds, Analytics, Search Console verification, and GBP links.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Page Speed</h3>
+          <p>Measure server response time, page size, compression, caching, and image optimization.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Mobile Friendliness</h3>
+          <p>Check viewport meta, click-to-call links, touch icons, and mobile UX signals.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📝</div>
+          <h3>Content Signals</h3>
+          <p>Audit H1/H2 tags, word count, internal links, and on-page content structure.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚙️</div>
+          <h3>Technical SEO</h3>
+          <p>Verify robots.txt, sitemap.xml, 404 handling, and WWW/non-WWW canonicalization.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3>Social & Reviews</h3>
+          <p>Detect social media links, Yelp listings, review schema, and visible star ratings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Local SEO Audit Tool — Free, open source, no sign-up required.</p>
+      <p class="muted">Built with Flask &amp; Python · <a href="https://github.com" target="_blank">View on GitHub</a></p>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>
